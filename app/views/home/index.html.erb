@@ -9,16 +9,38 @@
 <%end%>
 <div class="col-12">
     <div class="row">
-                <% @tweets.each do |tweet|%>
+        <% @tweets.each do |tweet|%>
         <div class="col-12 border border-warning p-3 mt-1">
             <%= image_tag (tweet.user.photo_url), class:"avatar-in-tweet rounded"%>
             <hr>
             <%= tweet.content%>
-            <%= tweet.likes.count%> <p>likes | 0 re-tweets</p>
+            <p> <%= time_ago_in_words(tweet.created_at)%> 
+            <br/>
+            <span>
+            <%= tweet.likes.count%> 
+
+            <% if tweet.is_liked?(current_user)%>
+                <%=link_to '<i class="fas fa-heart text-warning"></i>'.html_safe, tweet_likes_path(tweet), method: :post%>
+                
+            <%else%>
+                <%=link_to '<i class="far fa-heart text-warning"></i>'.html_safe, tweet_likes_path(tweet), method: :post%>
+                
+            <%end%>
+            </span>
+                | 
+            <span>
+            <%= tweet.count_rt%>
+            <% if tweet.count_rt > 0 %>
+                <i class="fas fa-retweet text-warning"></i>
+            <%else%>
+                <i class="fas fa-retweet text-secondary"></i>
+            <%end%>
+            
+            </span>
 
         </div>
 
-            <%end%>
+        <%end%>
 
         <div class="row mt-1">
             <%= paginate @tweets %>

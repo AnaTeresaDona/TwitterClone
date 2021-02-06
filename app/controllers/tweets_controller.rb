@@ -1,5 +1,7 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: %i[ show edit update destroy ]
+  before_action :set_current_tweet, only:[:likes, :retweet]
+
 
   # GET /tweets or /tweets.json
   def index
@@ -57,10 +59,31 @@ class TweetsController < ApplicationController
     end
   end
 
+  def likes
+    #corazones solo pueden ser clickeados por el usuario autenticado. 
+    #ver si el usuario que está logueado ya le había dado like.
+    if @tweet.is_liked?(current_user)
+      #Sí => tine que quitarle el like
+      @tweet.remove_like(current_user)    
+    else
+      #No => tiene que darle like
+      @tweet.add_like(current_user)
+    end
+    redirect_to root_path
+  end
+
+  def retweet
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_tweet
       @tweet = Tweet.find(params[:id])
+    end
+
+    def set_current_tweet
+      @tweet = Tweet.find(params[:tweet_id])
     end
 
     # Only allow a list of trusted parameters through.
