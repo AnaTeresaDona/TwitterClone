@@ -73,7 +73,8 @@ class TweetsController < ApplicationController
   end
 
   def retweet
-
+    new_tweet = Tweet.create(content: @tweet.content, user: current_user, rt_ref: @tweet.id)
+    redirect_to root_path
   end
 
   private

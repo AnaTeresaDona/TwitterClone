@@ -5,5 +5,22 @@
 
 
 .avatar-in-tweet {
+    vertical-align: middle;
     width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.retweet-ref {
+    color: yellow;
+    font-size: 10px;
+    padding: 2px;
+    background-color: gray;
+}
+
+.avatar-in-retweet{
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
 }
