@@ -6,7 +6,7 @@ class Tweet < ApplicationRecord
   has_many :likes
   has_many :liking_users, through: :likes, source: :user # mismo sistema que el del modelo user, pero estamos parados desde tweet y queremos saber cuántos likes. 
 
-  paginates_per 5
+  paginates_per 50
 
   def is_liked?(user)
     self.liking_users.include?(user) ? true : false
