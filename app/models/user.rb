@@ -5,18 +5,19 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :tweets, dependent: :destroy
-  has_many :likes
-  has_many :liked_tweets, through: :likes, source: :tweet #es un método que permite saber a qué tweet el usuario le hizo like.
+  has_many :likes, dependent: :destroy
+  has_many :liked_tweets, through: :likes, source: :tweet 
   has_many :friends, dependent: :destroy
 
-
+#Creamos un listado de amiguis
   def users_followed
-    arr_ids = self.friends.pluck(:friend_id) #ahora en ese arreglo (arr_ids) tengo guardados todos mis amigos.
-    User.find(arr_ids)
+    arr_ids = self.friends.pluck(:friend_id) #Trae solo números id(porqe el campo es un integer)
+    User.find(arr_ids) #Aquí se crean como objetos
   end
 
+#Creamos un método que respone solo verdadero o falso: el listado de amiguis incluye al user?
   def is_following?(user)
-    users_followed.include?(user)
+    users_followed.include? (user)
   end
 
   def to_s
