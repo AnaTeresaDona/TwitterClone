@@ -17,7 +17,7 @@
                 <%= link_to (current_user.is_following?(tweet.user) ? "<i class='fas fa-user-minus text-muted'></i>" : "<i class='fas fa-user-plus text-warning'></i>").html_safe, 
                 users_follow_path(tweet.user.id), 
                 class: "follow-btn", 
-                "title": (current_user.is_following?(tweet.user) ? "Siguiendo" : "Seguir"),
+                "title": (current_user.is_following?(tweet.user) ? "Dejar de seguir" : "Seguir"),
                 "data-toggle": "tooltip",
                 "data-placement": "right",
                 method: :post%> <!--no es mi id, es el id de la persona que creó el tweet -->

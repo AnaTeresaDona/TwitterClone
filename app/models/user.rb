@@ -24,6 +24,9 @@ class User < ApplicationRecord
     username
   end
 
+  # def arr_friends_id #aquí tengo el id de todos mis amigos, con esto nutro el scope de tweets_for_me (que es un método, ojo, los scope son métodos)
+  #   self.friends.pluck(:friend_id)
+  # end
 
 
 end

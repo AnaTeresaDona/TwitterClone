@@ -8,6 +8,8 @@ class Tweet < ApplicationRecord
 
   paginates_per 50
 
+  scope :tweets_for_me, -> (user) { where(user_id: user.friends.pluck(:friend_id).push(user.id)) }#Estoy haciendo una query a la instancia tweet (donde estoy parada) y le paso un arreglo de id al user_id
+
   def is_liked?(user)
     self.liking_users.include?(user) ? true : false
   end
