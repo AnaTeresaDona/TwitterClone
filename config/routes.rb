@@ -6,9 +6,16 @@ Rails.application.routes.draw do
     post 'retweet', to: 'tweets/retweet'
   end
 
-  devise_for :users
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
+
   get 'home/index'
   get 'all_tweets', to: 'home#all_tweets', as: 'all_tweets'
+
+  devise_scope :user do
+    get '/users/sign_out' => 'devise/sessions#destroy'
+  end
 
   post 'follow/:user_id', to: 'users#follow', as: 'users_follow'
 

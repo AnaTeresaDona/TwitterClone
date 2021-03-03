@@ -11,7 +11,8 @@ protect_from_forgery with: :exception
 
     protected
     def configure_permited_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:username, :photo_url])
+        devise_parameter_sanitizer.permit(:sign_up, keys: [:username, :photo_url])
+        devise_parameter_sanitizer.permit(:account_update, keys: [:username, :photo_url])
     end
 
 
