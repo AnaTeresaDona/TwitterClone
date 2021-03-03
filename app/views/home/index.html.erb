@@ -1,76 +1,39 @@
+<div class="row">
 <h1>Tweets</h1>
 
 <% if user_signed_in? %>
-
-<div class="col-12 border border-warning p-3 mt-1">
-
-    <%= render 'tweets/form', tweet: @tweet %>
-</div>
+    <div class="col-12 border border-warning p-3 mt-1">
+        <%= render 'tweets/form', tweet: @tweet %>
+    </div>
 <%end%>
-<div class="col-12">
-    <div class="row">
-        <% @tweets.each do |tweet|%>
-        <div class="col-12 border border-warning p-3 mt-1">
-            <%= image_tag (tweet.user.photo_url), class:"avatar-in-tweet rounded"%><br>
 
-            <% if user_signed_in? && current_user != tweet.user%>
-                <%= link_to (current_user.is_following?(tweet.user) ? "<i class='fas fa-user-minus text-muted'></i>" : "<i class='fas fa-user-plus text-warning'></i>").html_safe, 
-                users_follow_path(tweet.user.id), 
-                class: "follow-btn", 
-                "title": (current_user.is_following?(tweet.user) ? "Dejar de seguir" : "Seguir"),
-                "data-toggle": "tooltip",
-                "data-placement": "right",
-                method: :post%> <!--no es mi id, es el id de la persona que creó el tweet -->
-            <%end%>
-            
-            <%= tweet.user %> <br/>
-            <%= link_to '<i class="fas fa-calendar-day"></i>'.html_safe+"  "+distance_of_time_in_words(Time.now, tweet.created_at), tweet%>
-            <%# distance_of_time_in_words(from time, to time, include_seconds: true) %>
-            <hr>
-            <%= tweet.content%>
-            <br/>
-            <% if tweet.is_retweet?%>
-            <span>
-                <%= link_to 'Retweet de', tweet.tweet_ref, class:"retweet-ref"%>
-                
-                <%= image_tag (tweet.tweet_ref.user.photo_url), class:"avatar-in-retweet"%>
-                
-                <%= tweet.tweet_ref.user.username%>
-            </span>
-
-            <%end%>
-            <%# <p> <%= time_ago_in_words(tweet.created_at)%>  
-        
-            <br/>
-            <span>
-            <%= tweet.likes.count%> 
-
-            <% if tweet.is_liked?(current_user)%>
-                <%=link_to '<i class="fas fa-heart text-warning"></i>'.html_safe, tweet_likes_path(tweet), method: :post%>
-                
-            <%else%>
-                <%=link_to '<i class="far fa-heart text-warning"></i>'.html_safe, tweet_likes_path(tweet), method: :post%>
-                
-            <%end%>
-            </span>
-                | 
-            <span>
-            <%= tweet.count_rt%>
-            <% if tweet.count_rt > 0 %>
-                <%= link_to '<i class="fas fa-retweet text-warning"></i>'.html_safe, tweet_retweet_path(tweet), method: :post %>
-            <%else%>
-                <%= link_to '<i class="fas fa-retweet text-secondary"></i>'.html_safe, tweet_retweet_path(tweet), method: :post %>
-            <%end%>
-            
-            </span>
-
+    <div class="w-100 m-2">
+        <%= form_tag(root_path, method: :get) do %>
+        <div class="form-group">
+        <%= link_to "Limpiar", root_path, class: "btn btn-secondary text-warning float-right ml-2"%>
+        <%= submit_tag "Buscar", class:"btn btn-warning text-muted float-right ml-2"%>
+        <%= text_field_tag(:search, params[:search], class:"form-control d-inline float-right w-50")%>
         </div>
+    </div>
 
         <%end%>
+    </div>
 
-        <div class="row mt-1">
-            <%= paginate @tweets %>
+
+
+    <div class="col-12">
+        <div class="row">
+            <% @tweets.each do |tweet|%>
+
+            <%= render "shared/tweet_card", tweet: tweet%>
+            
+
+            <%end%>
         </div>
+
+            <div class="row mt-1">
+                <%= paginate @tweets %>
+            </div>
+            
         
     </div>
-</div>
