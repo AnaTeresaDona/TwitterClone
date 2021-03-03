@@ -9,6 +9,10 @@ class User < ApplicationRecord
   has_many :liked_tweets, through: :likes, source: :tweet 
   has_many :friends, dependent: :destroy
 
+  # def admin?
+  #   self.admin ? true : false
+  # end
+
 #Creamos un listado de amiguis
   def users_followed
     arr_ids = self.friends.pluck(:friend_id) #Trae solo números id(porqe el campo es un integer)
@@ -24,6 +28,26 @@ class User < ApplicationRecord
     username
   end
 
+  #Comienza lista de métodos para manejar el active admin (hito2/historia2)
+
+  def friends_count
+    #Friend.where(user: self).count
+    self.friends.count
+  end
+
+  def tweets_count
+    #Tweet.where(user_id: self.id).where(rt_ref: nil).count
+    self.tweets.where(rt_ref: nil).count
+  end
+
+  def likes_given
+    self.likes.count
+  end
+
+  def retweets_given
+    #Tweet.where(user_id: self.id).where.not(rt_ref: nil).count
+    self.tweets.where.not(rt_ref: nil).count
+  end
   # def arr_friends_id #aquí tengo el id de todos mis amigos, con esto nutro el scope de tweets_for_me (que es un método, ojo, los scope son métodos)
   #   self.friends.pluck(:friend_id)
   # end
