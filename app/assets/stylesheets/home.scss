@@ -16,10 +16,10 @@
 // }
 
 .retweet-ref {
-    color: yellow;
-    font-size: 10px;
+    color: #ffc107;
+    font-size: 15px;
     padding: 2px;
-    background-color: gray;
+    background-color: #ffffff;
 }
 
 .avatar-in-retweet{
@@ -27,4 +27,11 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
+}
+
+//_tweet_info card //
+
+#tweet_info {
+    max-width: 18rem;
+    background-color: #444444;
 }
