@@ -20,5 +20,14 @@ Rails.application.routes.draw do
   post 'follow/:user_id', to: 'users#follow', as: 'users_follow'
 
   root 'home#index'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+  # get 'api/news'  Voy a reemplazar esta ruta por un scope, para que todas las rutas dentro del scope vivan en api.
+
+  scope '/api' do
+    get '/news', to: 'api#news', as: 'api_news'
+    get '/:date1/:date2', to: 'api#tweets_between_dates', as: 'tweets_between_dates'
+    post '/tweets', to: 'api#create_tweet'
+  end
+    
+    # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

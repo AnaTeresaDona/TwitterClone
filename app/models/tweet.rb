@@ -49,4 +49,5 @@ class Tweet < ApplicationRecord
   def tweet_ref
     Tweet.find(self.rt_ref)
   end
+  
 end

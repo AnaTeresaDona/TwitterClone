@@ -12,7 +12,7 @@
     <%end%>
     
     <%= tweet.user %> <br/>
-    <%= link_to '<i class="fas fa-calendar-day"></i>'.html_safe+"  "+distance_of_time_in_words(Time.now, tweet.created_at), tweet%>
+    <%= link_to '<i class="fas fa-calendar-day text-warning"></i>'.html_safe+"  "+distance_of_time_in_words(Time.now, tweet.created_at), tweet%>
     <%# distance_of_time_in_words(from time, to time, include_seconds: true) %>
     <hr>
     <%= tweet.content.html_safe%>
