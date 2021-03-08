@@ -15,7 +15,9 @@ class User < ApplicationRecord
 
 #Creamos un listado de amiguis
   def users_followed
+    
     arr_ids = self.friends.pluck(:friend_id) #Trae solo números id(porqe el campo es un integer)
+    
     User.find(arr_ids) #Aquí se crean como objetos
   end
 

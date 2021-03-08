@@ -1,13 +1,14 @@
 class Tweet < ApplicationRecord
   include ActionView::Helpers::UrlHelper
-  
+
+  before_destroy :delete_rt
   before_save :add_hashtags
   validates :content, presence: true
   
   
   
   belongs_to :user
-  has_many :likes
+  has_many :likes, dependent: :destroy
   has_many :liking_users, through: :likes, source: :user # mismo sistema que el del modelo user, pero estamos parados desde tweet y queremos saber cuántos likes. 
 
   paginates_per 50
@@ -49,5 +50,24 @@ class Tweet < ApplicationRecord
   def tweet_ref
     Tweet.find(self.rt_ref)
   end
+
+  def delete_rt
+    Tweet.where(rt_ref: self.id).update_all(rt_ref: nil)
+  end
+
+  #creo un método que encapsule mi hash (para cumplir con DRY)
+  def my_hash
+    
+      {
+        id: self.id,
+        content: self.content,
+        user_id: self.user_id,
+        like_count: self.likes.count,
+        retweets_count: self.count_rt,
+        retweeted_from: self.rt_ref.nil? ? " " : self.rt_ref
+      }
+    
+  end
+
   
 end

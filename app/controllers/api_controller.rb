@@ -3,51 +3,47 @@ skip_before_action :verify_authenticity_token
 
   def news
     #render json: Tweet.last(50)
-
-    # id: 1,    
-    # content: 'este es mi primer tweet',    
-    # user_id 3,    
-    # like_count: 10,    
-    # retweets_count: 20,    
-    # rewtitted_from: 2
-
     tweets = Tweet.last(50)
 
     hash_result =tweets.map do |t|
-      {
-        id: t.id,
-        content: t.content,
-        user_id: t.user_id,
-        like_count: t.likes.count,
-        retweets_count: t.count_rt,
-        retweeted_from: t.rt_ref.nil? ? 0 : t.rt_ref
-      }
+      t.my_hash
     end
-
     render json: hash_result
+  end
 
+  def valid_tweet_date?(strdate)
+    date_to_s = strdate.split("-").map(&:to_i)
+    if strdate.match(/\d{4}-\d{2}-\d{2}/) && Date.valid_date?(date_to_s[0], date_to_s[1], date_to_s[2])
+      true
+    else    
+      false
+    end
+    
   end
 
   def tweets_between_dates
-    date1 = Date.parse(params[:date1])
-    date2 = Date.parse(params[:date2])
+    date1 = params[:date1]
+    date2 = params[:date2]
 
-    tweets = Tweet.where(created_at: date1..date2)
-
-    hash_result =tweets.map do |t|
-      {
-        id: t.id,
-        content: t.content,
-        user_id: t.user_id,
-        like_count: t.likes.count,
-        retweets_count: t.count_rt,
-        retweeted_from: t.rt_ref.nil? ? 0 : t.rt_ref
-      }
+    if (valid_tweet_date?(date1) && valid_tweet_date?(date2))      
+      date1 = Date.parse(params[:date1])
+      date2 = Date.parse(params[:date2])
+      if date1 > date2
+        render json: {errors: "Error: con el rango de las fechas usado"}
+      else
+        tweets = Tweet.where(created_at: date1..date2)
+        hash_result =tweets.map do |t|
+          t.my_hash
+        end
+        
+        render json: hash_result
+      end
+      
+    else 
+      render json: {errors: "Error: Fecha inválida"}
     end
-
-    render json: hash_result
   end
-
+ 
   #Creo una validación de seguridad (porque se la saqué antes)
   def create_tweet
     user = User.authenticate(params[:email], params[:password])
@@ -57,7 +53,7 @@ skip_before_action :verify_authenticity_token
         if @tweet.save 
           render json: @tweet 
         else 
-          render json: {errors: @tweet.errors.full_messages}
+          render json: {errors: "Error, el tweet no pudo crearse"}
         end
       else  
         render json: {errors: "Error with credentials"}
